@@ -1,0 +1,193 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const loops = ["001", "002", "003", "004"];
+const processClips = ["CDAWWIP_0011", "CDAWWIP_0031", "CDAW_WIP0051", "CDAWWIP_0041"];
+---
+
+<BaseLayout title="DAIS | Noah Achod">
+  <main>
+    <div class="main-content">
+      <h2>Canadian Democracy @ Work</h2>
+      <div class="text-block">
+        <p>Created by The DAIS at Toronto Metropolitan University, <em>Canadian Democracy @ Work</em> is a series which delivers civic and digital skills to the Canadian public.</p>
+        <p>Watch the modules <a href="https://teamdemocracy.ca/video-series/" target="_blank" rel="noopener noreferrer">here!</a></p>
+      </div>
+      <div class="video-grid video-grid--dais">
+        {loops.map((id) => (
+          <div class="video-wrapper"><video class="dais-video" autoplay muted loop playsinline><source src={`/videos/dais_loop_${id}.mp4`} type="video/mp4" /></video></div>
+        ))}
+      </div>
+      <section class="dais-wip-section">
+        <h3>Behind the Scenes</h3>
+        <div class="dais-wip-copy"><p>I handled animation on several modules, and created unique English and French versions of each module.</p></div>
+        <div class="dais-wip-gallery">
+          <div class="dais-wip-feature-column">
+            <video class="dais-wip-feature" data-src="/2.0_videos/CDAWWIP_Compressed/CDAW_WIP_007_web.mp4" autoplay muted loop playsinline preload="none" aria-label="Canadian Democracy at Work behind-the-scenes video"></video>
+            <div class="dais-wip-caption"><p>Characters are rigged with a combination of shape layers, Rubberhose, and in-house plugins.</p></div>
+          </div>
+          <div class="dais-wip-grid">
+            {processClips.map((clip) => <video data-src={`/2.0_videos/CDAWWIP_Compressed/${clip}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label="Canadian Democracy at Work animation process clip"></video>)}
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="../scripts/lazy-videos.ts"></script>
+</BaseLayout>
+
+<style>
+  .main-content {
+    max-width: 2000px;
+    margin-top: 0;
+  }
+
+  h2 {
+    width: 100%;
+    max-width: 2000px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .text-block {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 60px;
+  }
+
+  .text-block p,
+  .dais-wip-copy p {
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .text-block p + p {
+    margin-top: 16px;
+  }
+
+  .video-grid--dais {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    align-items: start;
+    width: 100%;
+    max-width: none;
+    margin: 40px auto;
+  }
+
+  .video-grid--dais .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 0;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-grid--dais video {
+    display: block;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    margin: -5px;
+    object-fit: cover;
+  }
+
+  .dais-wip-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 2000px;
+    margin-top: 80px;
+  }
+
+  .dais-wip-section > h3 {
+    width: 100%;
+    margin: 0 0 16px;
+    color: #888;
+    font-size: 48px;
+  }
+
+  .dais-wip-copy {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 0 52px;
+  }
+
+  .dais-wip-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 40px;
+  }
+
+  .dais-wip-feature-column {
+    min-width: 0;
+  }
+
+  .dais-wip-feature {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .dais-wip-grid {
+    display: grid;
+    grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 1;
+    align-self: start;
+  }
+
+  .dais-wip-grid video {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: cover;
+  }
+
+  .dais-wip-caption {
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .dais-wip-caption p {
+    margin-bottom: 0;
+    color: #888;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .video-grid--dais {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .dais-wip-gallery {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dais-wip-feature {
+      height: auto;
+    }
+
+    .video-grid--dais .video-wrapper {
+      overflow: hidden !important;
+    }
+
+    .video-grid--dais .video-wrapper video {
+      width: 100% !important;
+      height: calc(100% + 5px) !important;
+      margin: 0 0 -5px !important;
+    }
+  }
+</style>

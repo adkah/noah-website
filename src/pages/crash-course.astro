@@ -1,0 +1,105 @@
+---
+import EmbedGrid from "../components/EmbedGrid.astro";
+import MediaCaption from "../components/MediaCaption.astro";
+import VideoGrid from "../components/VideoGrid.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const clips = (ids: string[], prefix = "CC_Compressed/CC") => ids.map((id) => ({
+  src: `/2.0_videos/${prefix}_${id}_web.mp4`,
+  label: `Crash Course video ${id}`,
+}));
+---
+
+<BaseLayout title="Crash Course | Noah Achod">
+  <main>
+    <h2>Crash Course</h2>
+    <VideoGrid videos={clips(["016", "002"])} maxWidth="2000px" margin="0 0 clamp(100px, 8vw, 144px)" />
+
+    <div class="main-content">
+      <section class="crash-course-section">
+        <div class="text-block crash-course-section-copy">
+          <p>Crash Course is a giant in the world of educational content. I had the opportunity to contribute motion design to several series. I led animation on <a href="https://www.youtube.com/watch?v=O77IFewBxcg&amp;list=PL8dPuuaLjXtNDV8GjzfScxgEe4OgIlh3c" target="_blank" rel="noopener noreferrer"><em>Crash Course Religions</em></a> and <a href="https://www.youtube.com/watch?v=ymKnIuT7phM&amp;list=PLID58IQe16nGgx0__R3MEiDDSBGgicOjG" target="_blank" rel="noopener noreferrer"><em>Study Hall: Modern World History</em></a>, animating episodes, handling deliveries, and occasionally annotating scripts.</p>
+        </div>
+        <VideoGrid videos={clips(["010", "012", "022", "013"])} maxWidth="none" margin="0" />
+      </section>
+
+      <section class="crash-course-section crash-course-behind-scenes">
+        <h3 class="crash-course-section-heading">Behind the Scenes</h3>
+        <VideoGrid videos={clips(["002", "003", "004", "005", "006", "007"], "CCWIP_Compressed/CCWIP")} columns={6} mobileColumns={2} gap="12px" maxWidth="none" margin="0" aspectRatio="1" />
+        <MediaCaption maxWidth="none" margin="8px 0 32px">I've animated hundreds of characters across different Crash Course series. Characters are rigged with a combination of puppet pins, in-house plugins, and Rubberhose.</MediaCaption>
+        <VideoGrid videos={clips(["011", "014", "015", "021", "023", "025"])} columns={3} mobileColumns={2} gap="12px" maxWidth="none" margin="0" />
+        <MediaCaption maxWidth="none" margin="8px 0 0">Full-screen type moments, lower thirds, text boxes, and more have been automated using in-house plugins.</MediaCaption>
+      </section>
+
+      <section class="crash-course-section">
+        <h3 class="crash-course-section-heading">Informative and Accurate</h3>
+        <div class="text-block crash-course-section-copy">
+          <p>Every Crash Course series is educational. In addition to the series I've led, I've contributed motion to Botany, Biology, Psychology, and more. When animating an episode, every choice is informed by how well it conveys the necessary information.</p>
+          <p>Period-correct maps, clothing, dance, and historical dates are all handled with extreme precision and care.</p>
+        </div>
+        <VideoGrid videos={clips(["004", "005", "009", "001"])} maxWidth="none" margin="0" />
+      </section>
+
+      <section class="crash-course-section">
+        <h3 class="crash-course-section-heading">...Fun!</h3>
+        <p class="crash-course-section-copy">With that being said, my goal is to create work that is playful and entertaining.</p>
+        <VideoGrid videos={clips(["017", "018", "020", "007"])} maxWidth="none" margin="0" />
+      </section>
+
+      <section class="crash-course-section crash-course-youtube">
+        <EmbedGrid embeds={["e8FLcGEXsO0", "ciGqnGFWqBs", "JJ7fTJb6RHc", "WY-77h8FlFo"].map((id) => ({ src: `https://www.youtube.com/embed/${id}`, title: "Crash Course episode" }))} />
+        <MediaCaption maxWidth="none" margin="8px 0 0">A selection of some of my favourite Crash Course episodes I've worked on</MediaCaption>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .main-content {
+    max-width: 2000px;
+    margin-top: 0;
+    gap: clamp(100px, 8vw, 144px);
+  }
+
+  main > h2 {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 0 60px;
+    text-align: left;
+  }
+
+  .crash-course-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .crash-course-section-copy {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 0 52px;
+  }
+
+  .crash-course-section-copy p {
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .crash-course-section-copy p + p {
+    margin-top: 16px;
+  }
+
+  .crash-course-section-heading {
+    width: 100%;
+    margin: 0 0 16px;
+    color: #888;
+    font-size: 48px;
+  }
+
+  .crash-course-behind-scenes .crash-course-section-heading {
+    margin-bottom: 52px;
+  }
+
+</style>

@@ -1,0 +1,315 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const projects = [
+  { title: "My Fridge", videos: ["/perso_videos/MF_480_cropped.mp4"], posters: ["/thumbs/MF_thumb1.png"], caption: "Sound by Joseph Sims" },
+  { title: "Scandinavia", videos: ["/videos/Scandi_Widescreen_480.mp4"], posters: ["/thumbs/Scandi_Thumb.png"], caption: "Song by Armand Hammer" },
+  { title: "Long Distance", videos: ["/perso_videos/LD_480.mp4"], posters: ["/thumbs/LD_Thumb.png"], caption: "Sound by Joseph Sims" },
+  { title: "Push-ups", videos: ["/perso_videos/PU_480.mp4"], posters: ["/thumbs/PU_Thumb.png"] },
+  { title: "Pain Rat", videos: ["/pr_vid/PR_480.mp4"], posters: ["/thumbs/PR_Thumb.png"], caption: "Selected scene from Pain Rat (2026), directed by Martin Kramer" },
+  { title: "Tattoo", videos: ["/perso_videos/Tattoo_01_480_1.mp4", "/perso_videos/Tattoo_02_480_1.mp4"], posters: ["/thumbs/Tattoo_01_Thumb.png", "/thumbs/Tattoo_02_Thumb.png"], caption: "Selected scenes from Tattoo (2022), directed by me. Sound by Joseph Sims" },
+  { title: "Apple", videos: ["/perso_videos/Apple_Sound_480.mp4"], posters: ["/thumbs/Apple_Thumb.png"], caption: "Sound by Johnny Sales" },
+];
+---
+
+<BaseLayout title="Motion | Noah Achod">
+  <main>
+    <div class="main-content">
+      <div class="text-block">
+        <p>Below is a selection of personal projects exploring motion design, hand-drawn animation, and collaborations with sound designers and filmmakers.</p>
+      </div>
+    </div>
+    <div class="video-gallery-grid">
+      {projects.map((project) => (
+        <div
+          class:list={["project-block", { "project-tattoo": project.videos.length > 1 }]}
+          data-videos={project.videos.join(",")}
+          role="button"
+          tabindex="0"
+          aria-label={`Play ${project.title}`}
+        >
+          <div class:list={{ "tattoo-stack": project.videos.length > 1 }}>
+            {project.videos.map((src, index) => (
+              <div class:list={["video-crop", { "tattoo-clip": project.videos.length > 1 }]}>
+                <video class="personal-video" muted playsinline preload="metadata" poster={project.posters[index]}>
+                  <source src={src} type="video/mp4" />
+                </video>
+                <div class="video-overlay" aria-hidden="true">&#9654;</div>
+              </div>
+            ))}
+          </div>
+          <p class="tile-title">{project.title}</p>
+          {project.caption && <p class="tile-caption">{project.caption}</p>}
+        </div>
+      ))}
+    </div>
+    <dialog class="video-lightbox" id="videoLightbox" aria-label="Video player">
+      <div class="video-lightbox-inner"><video id="lightboxVideo" controls playsinline></video></div>
+    </dialog>
+  </main>
+  <script>
+    const blocks = document.querySelectorAll<HTMLElement>(".project-block");
+    const lightbox = document.querySelector<HTMLDialogElement>("#videoLightbox");
+    const player = document.querySelector<HTMLVideoElement>("#lightboxVideo");
+    const isMobile = window.matchMedia("(max-width: 768px)");
+    let playlist: string[] = [];
+    let index = 0;
+
+    const closeLightbox = () => {
+      if (!lightbox || !player) return;
+      player.pause();
+      player.removeAttribute("src");
+      lightbox.classList.remove("active");
+      lightbox.close();
+    };
+
+    const openVideo = () => {
+      if (!lightbox || !player || !playlist.length) return;
+      player.src = playlist[index];
+      if (!lightbox.open) lightbox.showModal();
+      lightbox.classList.add("active");
+      void player.play().catch(() => undefined);
+    };
+
+    if (isMobile.matches) {
+      blocks.forEach((block) => {
+        block.removeAttribute("role");
+        block.removeAttribute("tabindex");
+        block.querySelectorAll("video").forEach((video) => video.controls = true);
+      });
+    } else {
+      const activateBlock = (block: HTMLElement, target?: EventTarget | null) => {
+        playlist = (block.dataset.videos ?? "").split(",").filter(Boolean);
+        const clips = [...block.querySelectorAll(".video-crop")];
+        const selected = target instanceof Element ? target.closest(".video-crop") : null;
+        index = Math.max(0, clips.indexOf(selected as HTMLElement));
+        openVideo();
+      };
+
+      blocks.forEach((block) => {
+        block.addEventListener("click", (event) => activateBlock(block, event.target));
+        block.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activateBlock(block);
+          }
+        });
+      });
+    }
+
+    lightbox?.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    lightbox?.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!lightbox?.open || playlist.length < 2) return;
+      if (event.key === "ArrowRight") index = (index + 1) % playlist.length;
+      else if (event.key === "ArrowLeft") index = (index - 1 + playlist.length) % playlist.length;
+      else return;
+      openVideo();
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .main-content {
+    max-width: 2000px;
+    margin-top: 0;
+  }
+
+  .main-content > .text-block {
+    width: 100%;
+    max-width: 2000px;
+    margin: 60px auto;
+  }
+
+  .main-content > .text-block p {
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .video-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 60px;
+  }
+
+  .project-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .video-crop {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #000;
+    cursor: pointer;
+  }
+
+  .video-crop video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.35s ease;
+  }
+
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgb(0 0 0 / 35%);
+    font-size: 48px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .project-block:not(.project-tattoo) .video-crop:hover video {
+    transform: scale(1.06);
+  }
+
+  .project-tattoo .video-crop:hover video {
+    transform: scale(1.05);
+  }
+
+  .video-crop:hover .video-overlay {
+    opacity: 1;
+  }
+
+  .tile-title {
+    margin: 6px 0 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .tile-caption {
+    margin: 2px 0 0;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .project-tattoo {
+    gap: 10px;
+  }
+
+  .tattoo-stack {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 2px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .tattoo-stack .video-crop {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+  }
+
+  .video-lightbox {
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    border: 0;
+    background: rgb(0 0 0 / 85%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .video-lightbox[open] {
+    display: flex;
+  }
+
+  .video-lightbox.active {
+    opacity: 1;
+  }
+
+  .video-lightbox::backdrop {
+    background: transparent;
+  }
+
+  .video-lightbox-inner {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  .video-lightbox video {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    background: #000;
+  }
+
+  @media (min-width: 769px) {
+    .personal-video::-webkit-media-controls,
+    .personal-video::-webkit-media-controls-panel,
+    .personal-video::-webkit-media-controls-play-button,
+    .personal-video::-webkit-media-controls-start-playback-button,
+    .personal-video::-webkit-media-controls-timeline {
+      display: none;
+    }
+
+    .personal-video {
+      transform: translateZ(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .video-gallery-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .video-crop,
+    .tattoo-stack,
+    .project-block {
+      height: auto;
+      overflow: visible;
+      aspect-ratio: auto;
+      background: transparent;
+    }
+
+    .personal-video {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: none;
+      aspect-ratio: auto;
+      background: #000;
+      object-fit: contain;
+    }
+
+    .tattoo-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .video-overlay {
+      display: none;
+    }
+  }
+</style>

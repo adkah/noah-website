@@ -1,0 +1,140 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const projects = [
+  { href: "/further-study/", video: "/vb/fs_vb_2.mp4", title: "Further Study", poster: "/thumbs/MF_thumb1.png" },
+  { href: "/dais/", video: "/vb/dais_vb1_1.mp4", title: "Canadian Democracy @ Work" },
+  { href: "/sandboxaq/", video: "/vb/saq_vb1_1.mp4", title: "SandboxAQ" },
+  { href: "/crash-course/", video: "/vb/cc_vb2_1.mp4", title: "Crash Course" },
+  { href: "/understanding-snps/", video: "/vb/hhmi_vb.mp4", title: "Understanding SNPs" },
+  { href: "/motion/", video: "/perso_videos/MF_480_cropped.mp4", title: "Motion" },
+];
+---
+
+<BaseLayout>
+  <main>
+    <div class="video-figure video-figure--large">
+      <div class="video-wrapper">
+        <iframe
+          src="https://player.vimeo.com/video/1151438222"
+          title="Noah Achod motion design reel"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+    <div class="work-grid">
+      {projects.map(({ href, video, title, poster }) => (
+        <a href={href} class="work-btn">
+          <video autoplay muted loop playsinline poster={poster} aria-label={`${title} preview`}>
+            <source src={video} type="video/mp4" />
+          </video>
+          <span class="work-title">{title}</span>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .video-figure--large {
+    width: 100%;
+    max-width: 2000px;
+    margin: 40px auto;
+    padding: 0 12px;
+    align-self: stretch;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .work-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 3rem;
+    padding: 0 12px;
+  }
+
+  .work-btn {
+    position: relative;
+    display: block;
+    flex: 0 0 calc(50% - 8px);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    cursor: pointer;
+  }
+
+  .work-btn video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease, filter 0.35s ease;
+  }
+
+  .work-title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #fff;
+    background: rgb(0 0 0 / 18%);
+    font-family: "Instrument Sans", Helvetica, Arial, sans-serif;
+    font-size: clamp(24px, 3vw, 48px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-align: center;
+    text-transform: lowercase;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .work-btn:hover video,
+  .work-btn:focus-visible video {
+    transform: scale(1.06);
+    filter: blur(1.8px);
+  }
+
+  .work-btn:hover .work-title,
+  .work-btn:focus-visible .work-title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .video-figure--large {
+      padding: 0 6px;
+    }
+
+    .work-grid {
+      gap: 12px;
+      padding: 0 6px;
+    }
+
+    .work-btn {
+      flex-basis: 100%;
+      max-width: none;
+    }
+  }
+</style>

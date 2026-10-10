@@ -1,0 +1,239 @@
+---
+const currentPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
+
+const links = [
+  { href: "/", label: "work" },
+  { href: "/about/", label: "about" },
+  { href: "https://www.instagram.com/nonostyleee/", label: "instagram", external: true },
+  { href: "https://www.linkedin.com/in/noah-achod-725132253/", label: "linkedin", external: true },
+  { href: "mailto:achodnoah@gmail.com", label: "contact" },
+];
+---
+
+<header class="sidebar">
+  <div class="sidebar-header">
+    <h1><a href="/">Noah Achod</a></h1>
+  </div>
+  <nav class="nav" aria-label="Main navigation">
+    {links.map(({ href, label, external }) => (
+      <a
+        href={href}
+        class:list={{ active: !external && normalizePath(href) === currentPath }}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        aria-current={!external && normalizePath(href) === currentPath ? "page" : undefined}
+      >
+        {label}
+      </a>
+    ))}
+    <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <dialog class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
+    <button class="mobile-menu-close" type="button" aria-label="Close menu">&times;</button>
+    <nav class="mobile-menu-links" aria-label="Mobile navigation">
+      {links.map(({ href, label, external }) => (
+        <a
+          href={href}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noopener noreferrer" : undefined}
+          aria-current={!external && normalizePath(href) === currentPath ? "page" : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  </dialog>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".mobile-menu-toggle");
+  const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
+  const closeButton = menu?.querySelector<HTMLButtonElement>(".mobile-menu-close");
+
+  const openMenu = () => {
+    if (!menu || !toggle) return;
+    menu.showModal();
+    toggle.setAttribute("aria-expanded", "true");
+  };
+
+  const closeMenu = () => {
+    if (!menu || !toggle) return;
+    menu.close();
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.focus();
+  };
+
+  toggle?.addEventListener("click", openMenu);
+  closeButton?.addEventListener("click", closeMenu);
+  menu?.addEventListener("click", (event) => {
+    if (event.target === menu) closeMenu();
+  });
+  menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => menu.close()));
+  menu?.addEventListener("close", () => toggle?.setAttribute("aria-expanded", "false"));
+</script>
+
+<style>
+  .sidebar {
+    position: static;
+    display: flex;
+  }
+
+  .sidebar-header {
+    position: absolute;
+    top: 24px;
+    left: max(40px, calc((100vw - 2000px) / 2));
+  }
+
+  h1 {
+    display: inline-block;
+    margin: 0;
+    font-size: 1.3rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  h1 a {
+    color: #666;
+    text-decoration: none;
+  }
+
+  .nav {
+    position: absolute;
+    top: 24px;
+    right: max(52px, calc((100vw - 2000px) / 2 + 12px));
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .nav a {
+    display: inline-block;
+    color: #555;
+    cursor: pointer;
+    font-size: 1.1rem;
+    letter-spacing: -0.05em;
+    text-decoration: none;
+    text-transform: lowercase;
+    transition: color 0.25s ease, transform 0.2s ease;
+  }
+
+  .nav a:hover {
+    color: #000;
+    transform: scale(1.05);
+  }
+
+  h1 a:hover {
+    color: #666;
+  }
+
+  .nav a.active {
+    color: #000;
+    font-weight: 500;
+  }
+
+  .mobile-menu-toggle,
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .mobile-menu-toggle {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: static;
+    }
+
+    .sidebar-header {
+      top: 16px;
+      left: 26px;
+    }
+
+    .nav {
+      top: 16px;
+      right: 26px;
+      gap: 16px;
+    }
+
+    .nav > a {
+      display: none;
+    }
+
+    .nav .mobile-menu-toggle {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      width: 24px;
+      height: 24px;
+      padding: 3px 0;
+    }
+
+    .mobile-menu-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: #333;
+    }
+
+    .mobile-menu[open] {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      padding: 80px 26px 32px;
+      border: 0;
+      background: #fff;
+    }
+
+    .mobile-menu::backdrop {
+      background: rgb(0 0 0 / 20%);
+    }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 16px;
+      right: 26px;
+      border: 0;
+      color: #333;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .mobile-menu-links a {
+      color: #555;
+      font-size: clamp(1.75rem, 8vw, 2.25rem);
+      letter-spacing: -0.05em;
+      text-decoration: none;
+      text-transform: lowercase;
+      transition: color 0.25s ease, transform 0.2s ease;
+    }
+
+    .mobile-menu-links a:hover,
+    .mobile-menu-links a[aria-current="page"] {
+      color: #000;
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About | Noah Achod">
+  <main>
+    <div class="main-content">
+      <div class="about-grid">
+        <div class="about-photo">
+          <img src="/site-images/headshot_cropped.png" alt="Noah Achod" width="360" height="360" />
+        </div>
+        <div class="text-block">
+          <p>I'm a motion designer based in Montreal, Quebec. I studied film animation at Concordia University.</p>
+          <p>At Thought Café, I had the opportunity to develop and animate <a href="/further-study/"><em>Further Study</em></a> with Hemmat Law, lead animation on multiple series of <a href="/crash-course/">Crash Course</a>, and provide motion design for projects with <a href="/dais/">Toronto Metropolitan University</a>, <a href="/sandboxaq/">SandboxAQ</a>, and The <a href="/understanding-snps/">Howard Hughes Medical Institute</a>.</p>
+          <p>I've also worked as a compositor on <a href="https://en.wikipedia.org/wiki/When_Adam_Changes" target="_blank" rel="noopener noreferrer"><em>Adam Change Lentement</em></a>, and as VFX production assistant at Frontier VFX.</p>
+          <p>In addition to motion design, I'm passionate about literature, hip-hop, cycling, and cinema.</p>
+          <p>email: <a href="mailto:achodnoah@gmail.com">achodnoah@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding-top: 120px;
+  }
+
+  .about-grid {
+    display: flex;
+    align-items: stretch;
+    gap: 48px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .about-photo {
+    flex: 0 0 360px;
+  }
+
+  .about-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text-block {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0;
+  }
+
+  .text-block :global(a),
+  .text-block :global(a:hover) {
+    color: inherit;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding-top: 80px;
+    }
+
+    .main-content {
+      margin-top: 0;
+    }
+
+    .about-grid {
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .about-photo {
+      flex: none;
+      width: 100%;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    .text-block {
+      max-width: 260px;
+      margin: 0 auto;
+    }
+  }
+</style>

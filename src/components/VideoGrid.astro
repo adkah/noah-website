@@ -1,0 +1,107 @@
+---
+interface Video {
+  src: string;
+  label: string;
+}
+
+interface Props {
+  videos: Video[];
+  class?: string;
+  lazy?: boolean;
+  columns?: number;
+  mobileColumns?: number;
+  gap?: string;
+  maxWidth?: string;
+  margin?: string;
+  aspectRatio?: string;
+}
+
+const {
+  videos,
+  class: className = "",
+  lazy = false,
+  columns = 2,
+  mobileColumns = 1,
+  gap = "32px",
+  maxWidth = "900px",
+  margin = "40px auto",
+  aspectRatio = "16 / 9",
+} = Astro.props;
+
+const gridStyle = [
+  `--grid-columns: ${columns}`,
+  `--grid-mobile-columns: ${mobileColumns}`,
+  `--grid-gap: ${gap}`,
+  `--grid-max-width: ${maxWidth}`,
+  `--grid-margin: ${margin}`,
+  `--video-aspect-ratio: ${aspectRatio}`,
+].join(";");
+---
+
+<div class:list={["video-grid", className]} style={gridStyle}>
+  {videos.map(({ src, label }) => (
+    <div class="video-wrapper">
+      <video
+        src={lazy ? undefined : src}
+        data-src={lazy ? src : undefined}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label={label}
+      ></video>
+    </div>
+  ))}
+</div>
+
+<style>
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: var(--grid-gap);
+    width: 100%;
+    max-width: var(--grid-max-width);
+    margin: var(--grid-margin);
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    aspect-ratio: var(--video-aspect-ratio);
+  }
+
+  video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 0;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .video-grid {
+      grid-template-columns: repeat(var(--grid-mobile-columns), minmax(0, 1fr));
+      max-width: 100%;
+    }
+
+    .video-wrapper {
+      height: auto;
+      padding-bottom: 0;
+      overflow: visible;
+    }
+
+    video {
+      object-fit: cover;
+    }
+  }
+</style>

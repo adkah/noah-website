@@ -1,0 +1,246 @@
+---
+import EmbedGrid from "../components/EmbedGrid.astro";
+import MediaCaption from "../components/MediaCaption.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const episodes = ["I15wAGqQjQI", "iwIluq9U77M", "OJDdjr0VnDw", "i0fqEKDmDig", "I2FYEsZDmz8", "jK1EbjFd0vs"];
+---
+
+<BaseLayout title="Further Study | Noah Achod">
+  <main>
+    <h2>Further Study</h2>
+    <div class="text-block further-study-intro">
+      <p>Created by Hemmat Law, <em>Further Study</em> seeks to make the law and concepts surrounding it approachable and easy to understand.</p>
+    </div>
+    <div class="further-study-feature-wrap">
+      {["003", "002"].map((id) => <video class="further-study-feature" data-src={`/2.0_videos/FS_Compressed/FS_${id}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label={`Further Study video ${id}`}></video>)}
+    </div>
+    <div class="main-content">
+      <section class="further-study-group further-study-group-2">
+        <div class="further-study-middle-videos">
+          {["014", "012", "017"].map((id) => <video data-src={`/2.0_videos/FS_Compressed/FS_${id}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label={`Further Study video ${id}`}></video>)}
+        </div>
+      </section>
+      <section class="further-study-group further-study-group-3">
+        <h3>Behind the Scenes</h3>
+        <div class="text-block further-study-group-copy"><p>As well as handling animation, I worked with both the creative and production teams to develop an animation pipeline, and built presets to increase efficiency and brand compliance across episodes.</p></div>
+        <div class="further-study-wip-videos">
+          <video data-src="/2.0_videos/FSWIP_Compressed/AL_002_web.mp4" autoplay muted loop playsinline preload="none" aria-label="Animation Lab video 002"></video>
+          <div class="wip-mobile-caption"><p>A collection of squiggles, lines, miscellaneous shapes, and speech bubbles prepared for re-use across episodes.</p></div>
+          <div class="further-study-wip-stack">
+            <div class="wip-video-frame wip-video-frame--black"><video data-src="/2.0_videos/FSWIP_Compressed/FSOSTWIP_0021_web.mp4" autoplay muted loop playsinline preload="none" aria-label="Further Study work in progress video 0021"></video></div>
+            <div class="wip-video-frame wip-video-frame--gray"><video data-src="/2.0_videos/FSWIP_Compressed/FSOSTWIP_0041_web.mp4" autoplay muted loop playsinline preload="none" aria-label="Further Study work in progress video 0041"></video></div>
+          </div>
+          <div class="wip-mobile-caption"><p>Characters are rigged with a combination of plug-ins and shape layers for maximum finesse.</p></div>
+        </div>
+        <div class="further-study-wip-captions">
+          <div class="wip-caption"><p>A collection of squiggles, lines, miscellaneous shapes, and speech bubbles prepared for re-use across episodes.</p></div>
+          <div class="wip-caption"><p>Characters are rigged with a combination of plug-ins and shape layers for maximum finesse.</p></div>
+        </div>
+      </section>
+      <section class="further-study-group further-study-group-4">
+        <div class="further-study-wip-gallery">
+          {["005", "006"].map((id) => <video data-src={`/2.0_videos/FSWIP_Compressed/FSWIP_${id}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label={`Further Study work in progress video ${id}`}></video>)}
+        </div>
+      </section>
+      <section class="further-study-group further-study-group-5">
+        <h3>Mixed-Media Approach</h3>
+        <div class="text-block further-study-group-copy"><p>Collage assets are combined with rigged characters for a playful, textured, mixed-media aesthetic.</p></div>
+        <div class="further-study-mixed-media-grid">
+          {["021", "015", "013", "006"].map((id) => <video data-src={`/2.0_videos/FS_Exports_Compressed/FS_${id}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label={`Further Study video ${id}`}></video>)}
+        </div>
+      </section>
+      <section class="further-study-group further-study-group-6">
+        <EmbedGrid embeds={episodes.map((id) => ({ src: `https://www.youtube.com/embed/${id}?loop=1&playlist=${id}`, title: "Further Study episode" }))} />
+        <MediaCaption maxWidth="none" margin="0">A selection of Further Study episodes I worked on</MediaCaption>
+      </section>
+    </div>
+  </main>
+  <script src="../scripts/lazy-videos.ts"></script>
+  <script>
+    const finalRowVideos = document.querySelectorAll<HTMLVideoElement>(".further-study-wip-gallery video");
+    const [firstVideo, secondVideo] = finalRowVideos;
+
+    const matchVideoHeights = () => {
+      if (!firstVideo || !secondVideo?.videoWidth) return;
+      firstVideo.style.height = `${secondVideo.clientWidth * secondVideo.videoHeight / secondVideo.videoWidth}px`;
+      firstVideo.style.objectFit = "cover";
+    };
+
+    secondVideo?.addEventListener("loadedmetadata", matchVideoHeights);
+    window.addEventListener("resize", matchVideoHeights, { passive: true });
+  </script>
+</BaseLayout>
+
+<style>
+  .main-content {
+    max-width: 2000px;
+    margin-top: clamp(100px, 8vw, 144px);
+    gap: clamp(100px, 8vw, 144px);
+  }
+
+  main > h2 {
+    width: 100%;
+    max-width: 2000px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .further-study-intro {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 60px;
+  }
+
+  .further-study-intro p,
+  .further-study-group-copy p {
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .further-study-feature-wrap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .further-study-feature,
+  .further-study-middle-videos video,
+  .further-study-mixed-media-grid video,
+  .further-study-wip-gallery video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    align-self: start;
+  }
+
+  .further-study-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .further-study-group-2,
+  .further-study-group-4 {
+    margin-top: -80px;
+  }
+
+  .further-study-group-copy {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 0 52px;
+  }
+
+  .further-study-group-3 > h3,
+  .further-study-group-5 > h3 {
+    width: 100%;
+    margin: 0 0 16px;
+    color: #888;
+    font-size: 48px;
+  }
+
+  .further-study-middle-videos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .further-study-mixed-media-grid,
+  .further-study-wip-videos,
+  .further-study-wip-captions,
+  .further-study-wip-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .further-study-wip-videos > video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    align-self: start;
+  }
+
+  .further-study-wip-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .wip-video-frame {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .wip-video-frame video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .further-study-wip-captions {
+    margin-top: 0;
+  }
+
+  .wip-caption {
+    width: 100%;
+    text-align: left;
+  }
+
+  .wip-caption p,
+  .wip-mobile-caption p {
+    color: #888;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .wip-mobile-caption {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .further-study-feature-wrap,
+    .further-study-middle-videos,
+    .further-study-mixed-media-grid,
+    .further-study-wip-gallery {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .further-study-wip-videos {
+      grid-template-columns: 1fr;
+      row-gap: 8px;
+    }
+
+    .further-study-wip-captions {
+      display: none;
+    }
+
+    .wip-mobile-caption {
+      display: block;
+      width: 100%;
+      text-align: left;
+    }
+
+    .wip-video-frame {
+      flex: none;
+      height: clamp(180px, 60vw, 360px);
+    }
+  }
+</style>

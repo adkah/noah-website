@@ -1,0 +1,213 @@
+---
+import MediaCaption from "../components/MediaCaption.astro";
+import ShortsGrid from "../components/ShortsGrid.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const shorts = ["2Npsl3XzLtU", "TRlsJfijx9k", "BUZrNlQDXUo", "O5gByyAghlQ", "NEuxjzVMHa0", "B9mZFACkK3A"];
+const slides = ["saqslide_001.mp4", "saqslide_003_480.mp4", "saqslide_004_480.mp4", "saqslide_008_480.mp4"];
+---
+
+<BaseLayout title="SandboxAQ | Noah Achod">
+  <main>
+    <h2>SandboxAQ</h2>
+    <div class="main-content">
+      <div class="text-block sandbox-intro">
+        <p>SandboxAQ uses artificial intelligence and Large Quantitative Models to power organizations across cybersecurity, healthcare, navigation, and more.</p>
+        <p>To explain how this is achieved, I worked on longform testimonial videos, converted shorts for socials, and created assets for slide deck presentations.</p>
+      </div>
+      <div class="sandbox-saq-pair-grid">
+        <video src="/2.0_videos/SAQ_Compressed/SAQ_005_web.mp4" autoplay muted loop playsinline preload="none" aria-label="SandboxAQ video 005"></video>
+        <video src="/2.0_videos/SAQ_Compressed/SAQ_010_web.mp4" autoplay muted loop playsinline preload="none" aria-label="SandboxAQ video 010"></video>
+      </div>
+      <section class="shorts-section sandbox-testimonial">
+        <h3 class="sandbox-section-heading">AQTive Mind Testimonials</h3>
+        <div class="text-block sandbox-testimonial-copy">
+          <p>I contributed motion design to a series of testimonial videos, titled <em>AQTive Minds</em>. These videos highlight the experts at SandboxAQ, and showcase their career journeys and outlooks on the future of quantum computing, cybersecurity, and technology at large.</p>
+          <p>Watch the testimonials <a href="https://www.youtube.com/watch?v=JnU8LHhUTVg" target="_blank" rel="noopener noreferrer">here</a> and <a href="https://www.youtube.com/watch?v=bPokkWMhAEk" target="_blank" rel="noopener noreferrer">here</a>.</p>
+        </div>
+        <div class="sandbox-saq-feature-grid">
+          <video class="sandbox-saq-square-video" src="/2.0_videos/SAQ_Compressed/SAQ_008_web.mp4" autoplay muted loop playsinline preload="none" aria-label="SandboxAQ video 008"></video>
+          <div class="sandbox-saq-square-grid">
+            {["003", "006", "007", "004"].map((id) => <video src={`/2.0_videos/SAQ_Compressed/SAQ_${id}_web.mp4`} autoplay muted loop playsinline preload="none" aria-label={`SandboxAQ video ${id}`}></video>)}
+          </div>
+        </div>
+      </section>
+      <section class="shorts-section sandbox-shorts-section">
+        <h3 class="sandbox-section-heading">Sandbox Shorts</h3>
+        <div class="text-block sandbox-section-copy"><p>I converted longform explainer videos into shorts for social media platforms. Converting 16:9 longform explainer videos into 9:16 shorts involved editing, animating, and re-designing assets and layouts to better fit the aspect ratio.</p></div>
+        <ShortsGrid shorts={shorts.map((id) => ({ src: `https://www.youtube.com/embed/${id}`, title: "SandboxAQ short" }))} />
+        <MediaCaption maxWidth="2000px">A selection of Sandbox Shorts I created</MediaCaption>
+      </section>
+      <section class="shorts-section sandbox-slides">
+        <h3 class="sandbox-section-heading">Sandbox Slides</h3>
+        <div class="text-block sandbox-section-copy"><p>I contributed motion design to several presentations for SandboxAQ. I animated slides, assets, icons, and text, which were later compiled into decks presented both internally and externally.</p></div>
+        <div class="video-grid video-grid--sandbox">
+          {slides.map((file) => <div class="video-wrapper"><video autoplay muted loop playsinline><source src={`/videos/${file}`} type="video/mp4" /></video></div>)}
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .main-content {
+    max-width: 2000px;
+    margin-top: 0;
+  }
+
+  main > h2 {
+    width: 100%;
+    max-width: 2000px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .sandbox-intro {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 60px;
+  }
+
+  .sandbox-intro p,
+  .sandbox-section-copy p,
+  .sandbox-testimonial-copy p {
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .sandbox-intro p + p,
+  .sandbox-testimonial-copy p + p {
+    margin-top: 16px;
+  }
+
+  .sandbox-section-heading {
+    width: 100%;
+    margin: 0 0 16px;
+    color: #888;
+    font-size: 48px;
+  }
+
+  .sandbox-testimonial,
+  .sandbox-shorts-section,
+  .sandbox-slides {
+    gap: 8px;
+  }
+
+  .sandbox-section-copy,
+  .sandbox-testimonial-copy {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 0 52px;
+  }
+
+  .sandbox-testimonial-copy a {
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .shorts-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    margin-bottom: clamp(100px, 8vw, 144px);
+  }
+
+  .sandbox-slides {
+    margin-bottom: 0;
+  }
+
+  .video-grid--sandbox {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 40px;
+  }
+
+  .video-grid--sandbox .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-grid--sandbox video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sandbox-saq-pair-grid,
+  .sandbox-saq-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 2000px;
+  }
+
+  .sandbox-saq-pair-grid {
+    margin-bottom: clamp(100px, 8vw, 144px);
+  }
+
+  .sandbox-saq-pair-grid video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .sandbox-saq-square-video,
+  .sandbox-saq-square-grid {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .sandbox-saq-square-video {
+    height: auto;
+    object-fit: cover;
+  }
+
+  .sandbox-saq-square-grid {
+    display: grid;
+    grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .sandbox-saq-square-grid video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .sandbox-saq-pair-grid,
+    .sandbox-saq-feature-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .sandbox-saq-square-grid video {
+      height: 100% !important;
+    }
+
+    .video-grid--sandbox {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>
